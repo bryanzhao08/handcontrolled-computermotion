@@ -54,6 +54,18 @@ def mute_toggle() -> None:
     log.info("Mute toggled")
 
 
+def volume_min() -> None:
+    """Set volume all the way to 0."""
+    _osascript("set volume output volume 0")
+    log.info("Volume → 0")
+
+
+def volume_max() -> None:
+    """Set volume all the way to 100."""
+    _osascript("set volume output volume 100")
+    log.info("Volume → 100")
+
+
 # ── Brightness ────────────────────────────────────────────────────────────────
 # Uses synthetic key events (key code 144 = brightness up, 145 = brightness down).
 # Each press moves brightness ~6.25%, so delta=10 ≈ 2 key presses.
@@ -97,6 +109,8 @@ def no_action() -> None:
 ACTION_MAP: dict[str, callable] = {
     "volume_up":       volume_up,
     "volume_down":     volume_down,
+    "volume_min":      volume_min,
+    "volume_max":      volume_max,
     "mute_toggle":     mute_toggle,
     "brightness_up":   brightness_up,
     "brightness_down": brightness_down,

@@ -7,38 +7,37 @@ gestures:
   swipe_up:
     key: "u"           # key to select this label in collect_data.py
     action: volume_up
-    delta: 5           # volume units (0-100)
+    delta: 6           # ~1 macOS volume bar (each bar ≈ 6 units out of 100)
 
   swipe_down:
     key: "d"
     action: volume_down
-    delta: 5
+    delta: 6           # ~1 macOS volume bar down
 
   pinch:
     key: "p"
-    action: mute_toggle
+    action: none       # unbound — keep for future use
 
   spread:
     key: "s"
-    action: brightness_up
-    delta: 10          # approximate % per trigger
+    action: none       # unbound — keep for future use
 
   fist:
     key: "f"
-    action: brightness_down
-    delta: 10
+    action: volume_min  # sets volume to 0
 
   idle:
     key: "i"
-    action: none       # open hand / neutral — no action
+    action: none       # auto-handled: hand out of frame = idle
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Model / Inference Settings
 # ─────────────────────────────────────────────────────────────────────────────
 model:
-  hand: right                  # left | right | both
+  hand: left                   # left | right | both
   confidence_threshold: 0.85   # minimum softmax confidence to trigger an action
-  debounce_ms: 600             # minimum ms between consecutive action triggers
+  debounce_ms: 800             # minimum ms between consecutive action triggers
+  required_stable_frames: 8    # consecutive frames needed to confirm a gesture (~0.25s)
   history_frames: 5            # frames of history for velocity features
   use_velocity: true           # include inter-frame velocity in feature vector
 
@@ -55,14 +54,16 @@ training:
 # Data Collection
 # ─────────────────────────────────────────────────────────────────────────────
 data:
-  samples_per_gesture: 60      # frames recorded per SPACE press
+  samples_per_round: 20        # frames recorded per burst
+  rounds_per_press: 3          # auto-triggered bursts per SPACE press
+  countdown_secs: 2.0          # pause between bursts (reposition hand)
   output_file: data/gestures.csv
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Camera
 # ─────────────────────────────────────────────────────────────────────────────
 camera:
-  device_id: 0
+  device_id: 1
   width: 1280
   height: 720
   flip: true                   # mirror mode (natural for self-facing camera)
