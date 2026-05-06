@@ -1,0 +1,68 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Gesture → Action Mappings
+# Add, remove, or rename gestures freely — then re-run collect_data.py +
+# train_model.py to update the model.
+# ─────────────────────────────────────────────────────────────────────────────
+gestures:
+  swipe_up:
+    key: "u"           # key to select this label in collect_data.py
+    action: volume_up
+    delta: 5           # volume units (0-100)
+
+  swipe_down:
+    key: "d"
+    action: volume_down
+    delta: 5
+
+  pinch:
+    key: "p"
+    action: mute_toggle
+
+  spread:
+    key: "s"
+    action: brightness_up
+    delta: 10          # approximate % per trigger
+
+  fist:
+    key: "f"
+    action: brightness_down
+    delta: 10
+
+  idle:
+    key: "i"
+    action: none       # open hand / neutral — no action
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Model / Inference Settings
+# ─────────────────────────────────────────────────────────────────────────────
+model:
+  hand: right                  # left | right | both
+  confidence_threshold: 0.85   # minimum softmax confidence to trigger an action
+  debounce_ms: 600             # minimum ms between consecutive action triggers
+  history_frames: 5            # frames of history for velocity features
+  use_velocity: true           # include inter-frame velocity in feature vector
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Training
+# ─────────────────────────────────────────────────────────────────────────────
+training:
+  test_size: 0.2
+  random_state: 42
+  hidden_layer_sizes: [128, 64]
+  max_iter: 500
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Data Collection
+# ─────────────────────────────────────────────────────────────────────────────
+data:
+  samples_per_gesture: 60      # frames recorded per SPACE press
+  output_file: data/gestures.csv
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Camera
+# ─────────────────────────────────────────────────────────────────────────────
+camera:
+  device_id: 0
+  width: 1280
+  height: 720
+  flip: true                   # mirror mode (natural for self-facing camera)
